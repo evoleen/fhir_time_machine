@@ -65,3 +65,14 @@ final time = FhirTime('15:00').toLocalTime();
 
 A `FhirTime` can only be converted to a `LocalTime` because it doesn't contain any date or time zone information.
 
+## Converting from Time Machine types to FHIR types
+
+```dart
+final fhirInstant = Instant.now().toFhirInstant();
+final fhirDateTime = Instant.now().toFhirDateTime();
+final fhirDateTime2 = LocalDateTime.now().toFhirDateTime();
+final fhirDate = LocalDate.today().toFhirDate();
+final fhirTime = LocalTime.currentClockTime().toFhirTime();
+```
+
+Converting from Time Machine types to FHIR types is easier than the other way around, because the conversions are always unambiguous.
