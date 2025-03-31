@@ -96,6 +96,58 @@ extension FhirDateTimeX on FhirDateTime {
       }
     }
   }
+
+  /// Converts a [FhirDateTime] to a [LocalDateTime]
+  ///
+  /// Throws a [FormatException] if:
+  /// - The input string doesn't match any of the expected formats
+  LocalDateTime toLocalDateTime() {
+    // try with milliseconds first
+    try {
+      final pattern = LocalDateTimePattern.createWithInvariantCulture(
+        "uuuu-MM-dd'T'HH:mm:ss.fff",
+      );
+
+      final localDateTime = pattern.parse(toString()).value;
+      return localDateTime;
+    } catch (e) {
+      // try with seconds only
+      try {
+        final pattern = LocalDateTimePattern.createWithInvariantCulture(
+          "uuuu-MM-dd'T'HH:mm:ss",
+        );
+
+        final localDateTime = pattern.parse(toString()).value;
+        return localDateTime;
+      } catch (e) {
+        // try with minutes only
+        try {
+          final pattern = LocalDateTimePattern.createWithInvariantCulture(
+            "uuuu-MM-dd'T'HH:mm",
+          );
+
+          final localDateTime = pattern.parse(toString()).value;
+          return localDateTime;
+        } catch (e) {
+          throw FormatException(
+            'Failed to parse "$valueString". Input must match one of the supported formats.',
+          );
+        }
+      }
+    }
+  }
+
+  /// Converts a [FhirDate] to a [LocalDate]
+  LocalDate toLocalDate() {
+    try {
+      final pattern = LocalDatePattern.iso;
+      return pattern.parse(valueString).value;
+    } catch (e) {
+      throw FormatException(
+        'Failed to parse "$valueString". Input must be a valid date in the format YYYY-MM-DD.',
+      );
+    }
+  }
 }
 
 extension FhirDateX on FhirDate {
