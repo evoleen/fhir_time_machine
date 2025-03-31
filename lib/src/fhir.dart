@@ -3,6 +3,8 @@ import 'package:time_machine2/time_machine2.dart';
 
 extension FhirInstantX on FhirInstant {
   /// Converts a [FhirDateTime] to an [Instant] using the FHIR date time pattern.
+  /// The upstream implementation of [FhirInstant] is very forgiving and will
+  /// add missing time components to the timestamp.
   ///
   /// Throws a [FormatException] if:
   /// - The input string doesn't match any of the expected formats
@@ -99,7 +101,29 @@ extension FhirDateTimeX on FhirDateTime {
 extension FhirDateX on FhirDate {
   /// Converts a [FhirDate] to a [LocalDate]
   LocalDate toLocalDate() {
-    final pattern = LocalDatePattern.iso;
-    return pattern.parse(valueString).value;
+    try {
+      final pattern = LocalDatePattern.iso;
+      return pattern.parse(valueString).value;
+    } catch (e) {
+      throw FormatException(
+        'Failed to parse "$valueString". Input must be a valid date in the format YYYY-MM-DD.',
+      );
+    }
+  }
+}
+
+extension FhirTimeX on FhirTime {
+  /// Converts a [FhirTime] to a [LocalTime]
+  LocalTime toLocalTime() {
+    try {
+      final pattern = LocalTimePattern.createWithInvariantCulture(
+        "HH':'mm':'ss",
+      );
+      return pattern.parse(value!).value;
+    } catch (e) {
+      throw FormatException(
+        'Failed to parse "$value". Input must be a valid time in the format HH:MM:SS.',
+      );
+    }
   }
 }
