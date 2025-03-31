@@ -10,7 +10,7 @@ extension FhirInstantX on FhirInstant {
   Instant toInstant() {
     try {
       final pattern = OffsetDateTimePattern.createWithInvariantCulture(
-        "uuuu-MM-dd'T'HH:mm:ss[.FFF]O",
+        "uuuu-MM-dd'T'HH:mm:ss[.FFF]<O>",
       );
 
       if (!toString().contains('+') &&
@@ -46,24 +46,28 @@ extension FhirDateTimeX on FhirDateTime {
   /// - The input string doesn't match any of the expected formats
   /// - The timestamp doesn't include a time zone specification
   Instant toInstant() {
-    // try extended format first, then simple format, then the FHIR specific format
+    // try with milliseconds first
     try {
-      return ZonedDateTimePattern.extendedFormatOnlyIso
-          .withDefaultZoneProvider()
-          .parse(toString())
-          .value
-          .toInstant();
+      final pattern = OffsetDateTimePattern.createWithInvariantCulture(
+        "uuuu-MM-dd'T'HH:mm:ss.fffo<G>",
+      );
+
+      final offsetDateTime = pattern.parse(toString()).value;
+      return offsetDateTime.toInstant();
     } catch (e) {
+      // try with seconds only
       try {
-        return ZonedDateTimePattern.generalFormatOnlyIso
-            .withDefaultZoneProvider()
-            .parse(toString())
-            .value
-            .toInstant();
+        final pattern = OffsetDateTimePattern.createWithInvariantCulture(
+          "uuuu-MM-dd'T'HH:mm:sso<G>",
+        );
+
+        final offsetDateTime = pattern.parse(toString()).value;
+        return offsetDateTime.toInstant();
       } catch (e) {
+        // try with minutes only
         try {
           final pattern = OffsetDateTimePattern.createWithInvariantCulture(
-            "uuuu-MM-dd'T'HH:mm[:ss[.FFF]]O",
+            "uuuu-MM-dd'T'HH:mmo<G>",
           );
 
           if (!toString().contains('+') &&
@@ -86,5 +90,13 @@ extension FhirDateTimeX on FhirDateTime {
         }
       }
     }
+  }
+}
+
+extension FhirDateX on FhirDate {
+  /// Converts a [FhirDate] to a [LocalDate]
+  LocalDate toLocalDate() {
+    final pattern = LocalDatePattern.iso;
+    return pattern.parse(valueString).value;
   }
 }
