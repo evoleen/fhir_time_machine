@@ -21,20 +21,47 @@ The patient schedules an appointment at 2025-03-17, 15:00 CET, stored as `2025-0
 - Always work with `Instant`, for as long as possible - they represent unique, unambiguous points in time globally.
 - Convert to `ZonedDateTime` or `LocalDateTime` only for the purpose of displaying a time stamp or when you have to work with wall clock time, otherwise avoid the conversion.
 - If you have to convert to a `ZonedDateTime` or `LocalDateTime`, *always* use the time zone of the person / entity that is supposed to receive the converted time stamp. If you don't know the target time zone, don't use UTC as an easy way out - it will be wrong more often than it will be right.
-- If you need to modify a time stamp based on local time (for example "last midnight"), use temporary conversions to `ZonedDateTime`: `Instant.now().inLocalZone().atStartOfDay().toInstant()`. That way you avoid accidentally working with `ZonedDateTime`, potentially trying to change timezones.
+- If you need to modify a time stamp based on local time (for example "last midnight"), use temporary conversions to `ZonedDateTime`: `Instant.now().inZone(clientTimeZone).atStartOfDay().toInstant()`. That way you avoid accidentally working with `ZonedDateTime`, potentially trying to change timezones.
 - Don't convert to a FHIR type, modify the FHIR type and convert back to a Time Machine type. Arithmetics and modifications should only be performed on the Time Machine types.
+- Don't add extensions to convert to `ZonedDateTime` by using the `inUtc()` or `inLocalZone()` methods. This package doesn't provide these extensions by choice to force developers to make a conscious decision about the target time zone.
 
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+## Converting FhirInstant
 
 ```dart
-const like = 'sample';
+final instant = FhirInstant('2025-03-17T15:00+01:00').toInstant();
 ```
 
-## Additional information
+This is the easiest and most straight-forward conversion. A time zone offset *must* be present. Milliseconds are optional, but seconds are required.
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+## Converting FhirDateTime
+
+A `FhirDateTime` can be converted to an `Instant` or to a `LocalDateTime`. The client needs to know in advance which conversion is needed.
+
+```dart
+final dateTime = FhirDateTime('2025-03-17T15:00+01:00').toInstant();
+```
+
+The conversion is similar to the `FhirInstant` conversion, but makes milliseconds and seconds optional. A time zone offset is required.
+
+```dart
+final localDateTime = FhirDateTime('2025-03-17T15:00').toLocalDateTime();
+```
+
+This conversion works if no time zone offset is present.
+
+## Converting FhirDate
+
+```dart
+final date = FhirDate('2025-03-17').toLocalDate();
+```
+
+A `FhirDate` can only be converted to a `LocalDate` because it doesn't contain any time zone information. The application needs to know the target time zone if it wants to convert the date to a `ZonedDateTime` or `Instant`.
+
+## Converting FhirTime
+
+```dart
+final time = FhirTime('15:00').toLocalTime();
+```
+
+A `FhirTime` can only be converted to a `LocalTime` because it doesn't contain any date or time zone information.
+
