@@ -14,7 +14,7 @@ This package provides an opinionated way to translate FHIR `dateTime`, `date` an
 
 Consider a basic scheduling system where a patient can schedule appointments with their healthcare provider. The system consists of a patient app and a backend that manages the appointments. For the sake of this example, the patient is in Europe (CET timezone) and the backend works in UTC (default timezone for any server).
 
-The patient schedules an appointment at 2025-03-17, 15:00 CET, stored as `2025-03-17T15:00+01:00`. After the appointment is completed, the backend shall automatically schedule a follow-up *exactly* two weeks after the initial appointment. The backend would just add two weeks to the initial date and get `2025-03-31T15:00+01:00` as a result. However, this timestamp would be one week off, because CET would have undergone a DST transition in the meantime and now have an offset of `+02:00` - something that the FHIR presentation unfortunately swallows.
+The patient schedules an appointment at 2025-03-17, 15:00 CET, stored as `2025-03-17T15:00+01:00`. After the appointment is completed, the backend shall automatically schedule a follow-up *exactly* two weeks after the initial appointment. The backend would just add two weeks to the initial date and get `2025-03-31T15:00+01:00` as a result. However, this timestamp would be one hour off, because CET would have undergone a DST transition in the meantime and now have an offset of `+02:00` - something that the FHIR presentation unfortunately swallows.
 
 ## Best practices
 
