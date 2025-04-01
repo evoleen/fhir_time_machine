@@ -1,6 +1,6 @@
 # FHIR / Time Machine converters
 
-Utility extensions to help convert date/time types [from Dart's FHIR package](https://github.com/fhir-fli) to [Time Machine](https://github.com/evoleen/time_machine2) types.
+Utility extensions to help convert date/time types from Dart's [FHIR package](https://github.com/fhir-fli) to [Time Machine](https://github.com/evoleen/time_machine2) types.
 
 FHIR has very flexible date and time representations. FHIR's `dateTime` type allows YYYY, YYYY-MM, YYYY-MM-dd, etc - all the way to also allowing microsecond precision, with and without time zone offset. This is complicated in practice, because applications usually need to know which format to expect.
 
