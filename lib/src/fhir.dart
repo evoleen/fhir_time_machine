@@ -13,7 +13,7 @@ extension FhirInstantX on FhirInstant {
     // try with milliseconds first
     try {
       final pattern = OffsetDateTimePattern.createWithInvariantCulture(
-        "uuuu-MM-dd'T'HH:mm:ss.fffo<G>",
+        "uuuu-MM-dd'T'HH:mm:ss.FFFFFFo<G>",
       );
 
       final offsetDateTime = pattern.parse(toString()).value;
@@ -54,7 +54,7 @@ extension FhirDateTimeX on FhirDateTime {
     // try with milliseconds first
     try {
       final pattern = OffsetDateTimePattern.createWithInvariantCulture(
-        "uuuu-MM-dd'T'HH:mm:ss.fffo<G>",
+        "uuuu-MM-dd'T'HH:mm:ss.FFFFFFo<G>",
       );
 
       final offsetDateTime = pattern.parse(toString()).value;
