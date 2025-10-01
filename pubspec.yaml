@@ -1,6 +1,6 @@
 name: fhir_time_machine
 description: Converter extensions to translate between FHIR and Time Machine date/time types.
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/evoleen/fhir_time_machine
 
 environment:
@@ -8,7 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  fhir: ^0.12.1
+  fhir_r4: ^0.4.2
   time_machine2: ^0.12.1
 
 dev_dependencies:

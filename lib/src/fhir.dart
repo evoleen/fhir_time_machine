@@ -1,4 +1,4 @@
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:time_machine2/time_machine2.dart';
 
 extension FhirInstantX on FhirInstant {
@@ -141,7 +141,7 @@ extension FhirDateTimeX on FhirDateTime {
   LocalDate toLocalDate() {
     try {
       final pattern = LocalDatePattern.iso;
-      return pattern.parse(valueString).value;
+      return pattern.parse(valueString!).value;
     } catch (e) {
       throw FormatException(
         'Failed to parse "$valueString". Input must be a valid date in the format YYYY-MM-DD.',
@@ -155,7 +155,7 @@ extension FhirDateX on FhirDate {
   LocalDate toLocalDate() {
     try {
       final pattern = LocalDatePattern.iso;
-      return pattern.parse(valueString).value;
+      return pattern.parse(valueString!).value;
     } catch (e) {
       throw FormatException(
         'Failed to parse "$valueString". Input must be a valid date in the format YYYY-MM-DD.',
@@ -171,10 +171,10 @@ extension FhirTimeX on FhirTime {
       final pattern = LocalTimePattern.createWithInvariantCulture(
         "HH':'mm':'ss",
       );
-      return pattern.parse(value!).value;
+      return pattern.parse(valueString!).value;
     } catch (e) {
       throw FormatException(
-        'Failed to parse "$value". Input must be a valid time in the format HH:MM:SS.',
+        'Failed to parse "$valueString". Input must be a valid time in the format HH:MM:SS.',
       );
     }
   }

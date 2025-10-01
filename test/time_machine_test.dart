@@ -1,4 +1,4 @@
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:fhir_time_machine/fhir_time_machine.dart';
 import 'package:test/test.dart';
 import 'package:time_machine2/time_machine2.dart';
@@ -81,14 +81,14 @@ void main() {
       final localTime = LocalTime(1, 2, 3);
       final fhirTime = localTime.toFhirTime();
       expect(fhirTime, isA<FhirTime>());
-      expect(fhirTime.value, '01:02:03.000');
+      expect(fhirTime.valueString, '01:02:03.000');
     });
 
     test('toFhirTime() converts LocalTime with milliseconds correctly', () {
       final localTime = LocalTime(1, 2, 3, ms: 123);
       final fhirTime = localTime.toFhirTime();
       expect(fhirTime, isA<FhirTime>());
-      expect(fhirTime.value, '01:02:03.123');
+      expect(fhirTime.valueString, '01:02:03.123');
     });
   });
 }
