@@ -1,4 +1,4 @@
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:time_machine2/time_machine2.dart';
 
 extension InstantX on Instant {
@@ -7,7 +7,7 @@ extension InstantX on Instant {
       "uuuu-MM-dd'T'HH:mm:ss.fffo<G>",
     );
 
-    return FhirInstant(pattern.format(inUtc().toOffsetDateTime()));
+    return FhirInstant.fromString(pattern.format(inUtc().toOffsetDateTime()));
   }
 
   FhirDateTime toFhirDateTime() {
@@ -15,7 +15,7 @@ extension InstantX on Instant {
       "uuuu-MM-dd'T'HH:mm:ss.fffo<G>",
     );
 
-    return FhirDateTime(pattern.format(inUtc().toOffsetDateTime()));
+    return FhirDateTime.fromString(pattern.format(inUtc().toOffsetDateTime()));
   }
 }
 
@@ -25,7 +25,7 @@ extension LocalDateTimeX on LocalDateTime {
       "uuuu-MM-dd'T'HH:mm:ss.fff",
     );
 
-    return FhirDateTime(pattern.format(this));
+    return FhirDateTime.fromString(pattern.format(this));
   }
 }
 
@@ -33,7 +33,7 @@ extension LocalDateX on LocalDate {
   FhirDate toFhirDate() {
     final pattern = LocalDatePattern.iso;
 
-    return FhirDate(pattern.format(this));
+    return FhirDate.fromString(pattern.format(this));
   }
 }
 

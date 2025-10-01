@@ -8,7 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  fhir: ^0.12.1
+  fhir_r4: ^0.4.2
   time_machine2: ^0.12.1
 
 dev_dependencies:
