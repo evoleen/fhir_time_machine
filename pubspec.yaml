@@ -9,7 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   fhir_r4: ^0.4.2
-  time_machine2: 0.13.0
+  time_machine2: ^0.13.0
 
 dev_dependencies:
   lints: ^6.0.0
