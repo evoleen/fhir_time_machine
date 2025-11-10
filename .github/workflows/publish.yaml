@@ -3,7 +3,7 @@ name: Publish to pub.dev
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
 jobs:
   publish:
@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: 📚 Checkout
         uses: actions/checkout@v5
+
+      - name: 👴🏼 Setup Dart
+        uses: dart-lang/setup-dart@v1
 
       - name: 🗒️ Get version from tag name and edit pubspec accordingly
         id: get_version
@@ -30,5 +33,5 @@ jobs:
           echo "Updated pubspec.yaml:"
           grep "^version:" pubspec.yaml
 
-      - name: 📦 Publish package
-        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+      - name: Publish package
+        run: dart pub publish --force
