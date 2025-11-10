@@ -34,4 +34,4 @@ jobs:
           grep "^version:" pubspec.yaml
 
       - name: Publish package
-        run: dart pub publish --dry-run
+        run: dart pub publish
