@@ -9,4 +9,26 @@ jobs:
   publish:
     permissions:
       id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Checkout
+        uses: actions/checkout@v5
+
+      - name: 🗒️ Get version from tag name and edit pubspec accordingly
+        id: get_version
+        run: |
+          # Extract version from tag (remove 'v' prefix, support with/without build numbers)
+          export VERSION=$(perl -e '$_=$ENV{GITHUB_REF_NAME}//$ENV{GITHUB_REF}//q{}; s/^v//; /(\d+\.\d+\.\d+(?:\+\d+(?:-[A-Za-z0-9.\-]+)?)?)/ or die "Invalid tag format: $_\n"; print $1')
+          echo "Extracted version: $VERSION"
+          # Update pubspec.yaml version line (replace entire line, no duplication)
+          perl -0777 -i -pe 'BEGIN{$v=$ENV{VERSION}} if(s/^version:\s*.*/"version: $v"/em){}else{$_="version: $v\n$_"}' pubspec.yaml
+          # Verify update
+          if ! grep -q "^version: $VERSION" pubspec.yaml; then
+            echo "Error: Failed to update version in pubspec.yaml"
+            exit 1
+          fi
+          echo "Updated pubspec.yaml:"
+          grep "^version:" pubspec.yaml
+
+      - name: 📦 Publish package
+        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
