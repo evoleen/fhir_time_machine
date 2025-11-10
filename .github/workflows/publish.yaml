@@ -35,4 +35,4 @@ jobs:
 
       - name: Publish package
         run: |
-          dart pub lish --force
+          dart pub publish --dry-run
