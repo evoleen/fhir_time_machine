@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📚 Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 🗒️ Get version from tag name and edit pubspec accordingly
         id: get_version
